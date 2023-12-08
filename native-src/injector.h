@@ -1,6 +1,6 @@
-#ifndef JAR_TO_DLL_INJECTOR_H
-#define JAR_TO_DLL_INJECTOR_H
+#ifndef INJECTOR_H_
+#define INJECTOR_H_
 
 void RunInjector();
 
-#endif  //JAR_TO_DLL_INJECTOR_H
+#endif  //INJECTOR_H_
