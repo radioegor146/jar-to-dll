@@ -1,37 +1,17 @@
 #include <windows.h>
 
-BOOL WINAPI DllMain(        HINSTANCE
-hinstDLL,  // handle to DLL module
-DWORD fdwReason,     // reason for calling function
-LPVOID
-lpvReserved )  // reserved
-{
-// Perform actions based on the reason for calling.
-switch( fdwReason )
-{
-case DLL_PROCESS_ATTACH:
-// Initialize once for each new process.
-// Return FALSE to fail DLL load.
-break;
+#include "injector.h"
+#include "utils.h"
 
-case DLL_THREAD_ATTACH:
-// Do thread-specific initialization.
-break;
-
-case DLL_THREAD_DETACH:
-// Do thread-specific cleanup.
-break;
-
-case DLL_PROCESS_DETACH:
-
-if (lpvReserved != nullptr)
-{
-break; // do not do cleanup if process termination scenario
+static DWORD RunInjectorThreadProxy(LPVOID) {
+  RunInjector();
+  return 1;
 }
 
-// Perform any necessary cleanup.
-break;
-}
-return
-TRUE;  // Successful DLL_PROCESS_ATTACH.
+BOOL WINAPI DllMain(HINSTANCE dll_instance, DWORD reason, LPVOID reserved) {
+  if (reason == DLL_PROCESS_ATTACH) {
+    ::global_dll_instance = dll_instance;
+    CreateThread(nullptr, 0, &RunInjectorThreadProxy, nullptr, 0, nullptr);
+  }
+  return TRUE;
 }
