@@ -5,15 +5,15 @@ import java.lang.reflect.Method;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 
-public class Injector extends Thread {
+public class ForgeInjector extends Thread {
     private byte[][] classes;
 
-    private Injector(byte[][] classes) {
+    private ForgeInjector(byte[][] classes) {
         this.classes = classes;
     }
 
-    public static void inject(byte[][] classes) {
-        new Thread(new Injector(classes)).start();
+    public static void ForgeInjector(byte[][] classes) {
+        new Thread(new ForgeInjector(classes)).start();
     }
 
     private static Class tryGetClass(PrintWriter writer, ClassLoader cl, String... names) throws ClassNotFoundException {
@@ -22,7 +22,6 @@ public class Injector extends Thread {
     		try {
     			return cl.loadClass(name);
     		} catch (ClassNotFoundException e) {
-    			e.printStackTrace(writer);
     			lastException = e;
     		}
     	}
@@ -75,7 +74,20 @@ public class Injector extends Thread {
                         throw new Exception("getClass() is null");
                     }
                     try {
-                        Class tClass = (Class)loadMethod.invoke(cl, null, classData, 0, classData.length, cl.getClass().getProtectionDomain());
+                        Class tClass = null;
+                        try {
+                            tClass = (Class)loadMethod.invoke(cl, null, classData, 0, classData.length, cl.getClass().getProtectionDomain());
+                        } catch (Throwable e) {
+                            if (!(e instanceof LinkageError)) {
+                                throw e;
+                            }
+
+                            if (e.getMessage().contains("duplicate class definition for name: ")) {
+                                String className = e.getMessage().split("\"")[1];
+                                tClass = cl.loadClass(className.replace('/', '.'));
+                                writer.println("It is recommended to remove " + className + ".class from your input.jar");
+                            }
+                        }
                         if (tClass.getAnnotation(modAnnotation) == null) 
                         	continue;
                         Object[] mod = new Object[3];

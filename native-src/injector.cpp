@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <winuser.h>
 
+#include "injector.h"
 #include "jvm/jni.h"
 #include "utils.h"
 
@@ -60,7 +61,12 @@ static void GetJNIEnv(JavaVM* jvm, JNIEnv*& jni_env) {
   }
 }
 
-static jclass DefineInjector(JNIEnv* jni_env) {
+static jclass DefineOrGetInjector(JNIEnv* jni_env) {
+  const auto existing_injector_class = jni_env->FindClass(INJECTOR_CLASS_NAME);
+  if (existing_injector_class) {
+    ShowMessage(L"Injector class is already presented in jvm, using it");
+    return existing_injector_class;
+  }
   const auto injector_class = jni_env->DefineClass(
       nullptr, nullptr, injector_class_data, sizeof(injector_class_data));
   if (!injector_class) {
@@ -116,7 +122,7 @@ void RunInjector() {
   JNIEnv* jni_env;
   GetJNIEnv(jvm, jni_env);
 
-  const auto injector_class = DefineInjector(jni_env);
+  const auto injector_class = DefineOrGetInjector(jni_env);
   const auto jar_classes_array = GetJarClassesArray(jni_env);
 
   CallInjector(jni_env, injector_class, jar_classes_array);

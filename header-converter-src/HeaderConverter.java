@@ -293,6 +293,6 @@ public class HeaderConverter {
                 break;
         }
 
-        System.out.print("Ready for " + type);
+        System.out.println("Ready for " + type);
     }
 }
