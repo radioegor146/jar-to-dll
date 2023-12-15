@@ -12,7 +12,7 @@ public class ForgeInjector extends Thread {
         this.classes = classes;
     }
 
-    public static void ForgeInjector(byte[][] classes) {
+    public static void inject(byte[][] classes) {
         new Thread(new ForgeInjector(classes)).start();
     }
 
