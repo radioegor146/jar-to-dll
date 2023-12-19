@@ -2,6 +2,10 @@
 
 A simple tool that allows you to pack your mod .jar file to .dll and inject it into running Minecraft
 
+## Simple tutorial
+
+[English](/for-dummies/FOR_DUMMIES_EN.md) | [На русском](/for-dummies/FOR_DUMMIES_EN.md)
+
 ## Usage
 
 For building this I personally recommend using WSL on Windows or Linux
