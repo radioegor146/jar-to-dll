@@ -1,0 +1,30 @@
+on:
+  - push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install MinGW x86-64 compiler
+      run: apt install -y g++-mingw-w64-x86-64
+    - name: Install JDK
+      run: apt install -y openjdk-8-jdk
+    - name: Check if input.jar exists
+      id: check_input_jar
+      uses: andstor/file-existence-action@v1
+      with:
+        files: input.jar
+    - name: Copy test if input.jar does not exist
+      if: steps.check_input_jar.outputs.files_exists == 'false'
+      run: |
+        echo "::warning file=input.jar::No input.jar presented, so using input.jar.test"
+        cp input.jar.test input.jar
+    - name: Build
+      run: make build
+    - name: Upload output.dll as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: output-x64.dll
+        path: output.dll
+        if-no-files-found: error
