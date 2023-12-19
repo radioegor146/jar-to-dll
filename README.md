@@ -4,7 +4,7 @@ A simple tool that allows you to pack your mod .jar file to .dll and inject it i
 
 ## Simple tutorial
 
-[English](/for-dummies/FOR_DUMMIES_EN.md) | [На русском](/for-dummies/FOR_DUMMIES_EN.md)
+[English](/for-dummies/FOR_DUMMIES_EN.md) | [На русском](/for-dummies/FOR_DUMMIES_RU.md)
 
 ## Usage
 
