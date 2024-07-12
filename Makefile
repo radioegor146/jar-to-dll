@@ -7,7 +7,7 @@ build-header-converter:
 	@echo "Building class to header converter"
 	@javac -source 1.8 -target 1.8 header-converter-src/HeaderConverter.java
 convert-injector: build-injector build-header-converter
-	@echo "Building class to header converter"
+	@echo "Converting injector class to .h"
 	@java -cp header-converter-src HeaderConverter injector injector-src/*.class native-src/classes/injector.h
 convert-jar: build-header-converter
 	@echo "Converting input jar to .h"
